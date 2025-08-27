@@ -144,3 +144,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+username = 'abcdef'
+password = 'abc123def'

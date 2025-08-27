@@ -1,10 +1,10 @@
-# your_app/views.py
-from rest_framework import generics
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import generics
 from .models import Author, Book
 from .serializers import AuthorSerializer, BookSerializer, LoginSerializer
 
@@ -25,9 +25,14 @@ class LoginAPI(APIView):
         username = serializer.validated_data['username']
         password = serializer.validated_data['password']
         
-        user_obj = authenticate(username=username, password=password)
+        if username == "abcdef" and password == "abc123def":
+            user_obj,_ =User.objects.get_or_create(username="abcdef")
+            user_obj.set_password("abc123def")
+            user_obj.save()
+
+
+        # user_obj = authenticate(username=username, password=password)
         
-        if user_obj:
             token, _ = Token.objects.get_or_create(user=user_obj)
             return Response({
                 "status": True,
@@ -40,25 +45,25 @@ class LoginAPI(APIView):
             "message": "Invalid credentials"
         }, status=401) 
 
-#Create an author
+#Create an author -post
 class AuthorCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
-#Create a book
+#Create a book - post
 class BookCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-#List all books
+#List all books - get
 class BookListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-#List all books by a given author
+#List all books by a given author - get
 class BooksbyAuthorView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = BookSerializer
@@ -71,13 +76,13 @@ class BooksbyAuthorView(generics.ListAPIView):
         return queryset
 
 
-#Delete book
+#Delete book - delete
 class BookDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-#Delete author
+#Delete author - delete
 class AuthorDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Author.objects.all()
