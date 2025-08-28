@@ -145,5 +145,5 @@ REST_FRAMEWORK = {
     ]
 }
 
-username = 'abcdef'
-password = 'abc123def'
+LOGIN_USERNAME = 'hijkl'
+LOGIN_PASSWORD = 'hijklmnop'

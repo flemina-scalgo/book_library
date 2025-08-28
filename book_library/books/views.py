@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate
@@ -25,25 +26,23 @@ class LoginAPI(APIView):
         username = serializer.validated_data['username']
         password = serializer.validated_data['password']
         
-        if username == "abcdef" and password == "abc123def":
-            user_obj,_ =User.objects.get_or_create(username="abcdef")
-            user_obj.set_password("abc123def")
-            user_obj.save()
-
-
-        # user_obj = authenticate(username=username, password=password)
         
-            token, _ = Token.objects.get_or_create(user=user_obj)
+        if username == settings.LOGIN_USERNAME and password == settings.LOGIN_PASSWORD:
+            user_obj,created = User.objects.get_or_create(username=username)
+
+            if created:
+                user_obj.set_password(password)
+                user_obj.save()
+                
             return Response({
                 "status": True,
-                "data": {'token': str(token)}
-            })
-        
+                "data": {"message": "Login successful"}
+            }, status=200)
+
         return Response({
             "status": False,
-            "data": {},
-            "message": "Invalid credentials"
-        }, status=401) 
+            "data": {"message": "Invalid credentials"}
+        }, status=401)
 
 #Create an author -post
 class AuthorCreateView(generics.CreateAPIView):
