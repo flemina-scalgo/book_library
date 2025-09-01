@@ -1,7 +1,8 @@
-Book Author API
-A RESTful API built with Python and Django REST Framework for managing authors and their books. It features a one-to-many relationship where a single author can be associated with multiple books through a foreign key.
+<h1>Book Author API</h1>
+<p>A RESTful API built with Python and Django REST Framework for managing authors and their books. It features a one-to-many relationship where a single author can be associated with multiple books through a foreign key.</p>
+<br>
 
-🚀 Features
+<h3>🚀 Features </h3>
 Author Management: API endpoints for creating, retrieving, updating, and deleting author records.
 Book Management: API endpoints for creating, retrieving, updating, and deleting book records.
 Relational Data: Books are linked to authors via a foreign key, ensuring data integrity and enabling a clear relationship between the models.
